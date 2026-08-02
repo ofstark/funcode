@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Scratch This — Girlfriend's Day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8F0;
+    --plum:#3D1B3D;
+    --pink:#FF5C8A;
+    --pink-deep:#E8386D;
+    --lav:#C9A6FF;
+    --mint:#3FCBA0;
+    --gold:#D9A441;
+    --gold-light:#F0C464;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--cream);
+    color:var(--plum);
+    font-family:'Poppins', sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 5vw;
+    text-align:center;
+    overflow-x:hidden;
+  }
+  h1,h2,.display{font-family:'Baloo 2', sans-serif;}
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--plum);
+    color:var(--gold-light);
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:7px 16px;
+    border-radius:999px;
+    margin-bottom:20px;
+  }
+  h1{
+    font-size:clamp(1.9rem, 6vw, 3rem);
+    margin:0 0 10px;
+    color:var(--pink-deep);
+    text-shadow:3px 3px 0 var(--lav);
+  }
+  .sub{
+    max-width:480px;
+    font-size:clamp(.95rem, 2vw, 1.1rem);
+    opacity:.8;
+    margin:0 0 40px;
+  }
+
+  .card-wrap{
+    position:relative;
+    width:min(420px, 88vw);
+    height:min(420px, 88vw);
+    border-radius:24px;
+    box-shadow:0 14px 0 rgba(61,27,61,0.08), 0 0 0 4px var(--plum);
+    overflow:hidden;
+    background:var(--cream);
+  }
+  .reveal-layer{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+    background:linear-gradient(160deg, #FFEFE0, #FFE1EC);
+  }
+  .reveal-layer .cert-eyebrow{
+    font-size:11px; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--pink-deep); font-weight:700; margin-bottom:8px;
+  }
+  .reveal-layer .name{
+    font-family:'Caveat', cursive;
+    font-size:2.2rem;
+    color:var(--pink-deep);
+    margin:6px 0 10px;
+  }
+  .reveal-layer h2{
+    font-size:clamp(1.2rem, 4vw, 1.6rem);
+    margin:0 0 10px;
+  }
+  .reveal-layer p{
+    font-size:.9rem;
+    line-height:1.5;
+    margin:0;
+    max-width:320px;
+  }
+  .seal{
+    position:absolute;
+    top:-18px; right:18px;
+    background:var(--gold-light);
+    border:3px solid var(--plum);
+    border-radius:50%;
+    width:52px;height:52px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    transform:rotate(10deg);
+  }
+
+  canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    cursor:grab;
+    touch-action:none;
+  }
+  canvas:active{cursor:grabbing;}
+
+  .hint{
+    margin-top:18px;
+    font-size:.85rem;
+    opacity:.6;
+    font-weight:500;
+  }
+  .progress-bar{
+    width:min(420px, 88vw);
+    height:8px;
+    background:rgba(61,27,61,0.1);
+    border-radius:999px;
+    margin-top:16px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--pink), var(--gold-light));
+    transition:width .15s ease;
+  }
+
+  .name-input-wrap{
+    margin-bottom:28px;
+  }
+  .cert-input{
+    font-family:'Baloo 2', sans-serif;
+    font-size:1.05rem;
+    padding:10px 16px;
+    border-radius:12px;
+    border:2px solid var(--plum);
+    width:min(300px, 78vw);
+    text-align:center;
+    outline:none;
+  }
+
+  .replay-btn{
+    display:none;
+    margin-top:26px;
+    font-family:'Baloo 2', sans-serif;
+    background:var(--pink-deep);
+    color:white;
+    border:none;
+    padding:12px 26px;
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:4px 4px 0 var(--plum);
+  }
+  .replay-btn.show{display:inline-block;}
+
+  .confetti{
+    position:fixed;
+    top:-20px;
+    width:10px;height:16px;
+    z-index:999;
+    pointer-events:none;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+
+  footer{
+    margin-top:40px;
+    font-size:.75rem;
+    opacity:.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">🎟️ August 1st · Girlfriend's Day</div>
+<h1>Scratch to reveal</h1>
+<p class="sub">😔🎀Use your finger or mouse to scratch off the gold. No, you can't skip it.</p>
+
+<div class="name-input-wrap">
+  <input class="cert-input" id="nameInput" placeholder="Type your name.." oninput="updateName()">
+</div>
+
+<div class="card-wrap" id="cardWrap">
+  <div class="reveal-layer">
+    <div class="seal">❤</div>
+    <div class="cert-eyebrow">Certified as of Aug 1st</div>
+    <div class="name" id="certName">Lavanya 💘</div>
+    <h2>Honorary Girl-friend 😔🎀</h2>
+    <p>Happy Girlfriend's Day! 💖 Today is all about you. Thank you for always being there for me, making me smile, and filling my life with happiness. I'm truly lucky to have you. I hope we make many more beautiful memories together. 🌸</p>
+    <p>Never doubt my love for you or what we have together, I always want to spend more and more time with you</p>
+  </div>
+  <canvas id="scratchCanvas"></canvas>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="hint" id="hintText">0% scratched</div>
+
+<button class="replay-btn" id="replayBtn" onclick="location.reload()">Scratch again ↺</button>
+
+
+<script>
+function updateName(){
+  const val = document.getElementById('nameInput').value.trim() + "💘";
+  document.getElementById('certName').textContent = val ? val : 'you';
+}
+
+const canvas = document.getElementById('scratchCanvas');
+const ctx = canvas.getContext('2d');
+const cardWrap = document.getElementById('cardWrap');
+const progressFill = document.getElementById('progressFill');
+const hintText = document.getElementById('hintText');
+const replayBtn = document.getElementById('replayBtn');
+
+let scratching = false;
+let revealed = false;
+let checkCounter = 0;
+
+function sizeCanvas(){
+  const rect = cardWrap.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  drawFoil();
+}
+
+function drawFoil(){
+  const w = canvas.width, h = canvas.height;
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, '#F0C464');
+  grad.addColorStop(0.5, '#D9A441');
+  grad.addColorStop(1, '#C4902E');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.globalAlpha = 0.15;
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  for(let i = -h; i < w; i += 26){
+    ctx.beginPath();
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i + h, h);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = '#3D1B3D';
+  ctx.font = '700 ' + Math.round(w * 0.075) + 'px Baloo 2, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('SCRATCH HERE', w / 2, h / 2 - 14);
+  ctx.font = '500 ' + Math.round(w * 0.045) + 'px Poppins, sans-serif';
+  ctx.fillText('☝ drag your finger ☝', w / 2, h / 2 + 26);
+}
+
+sizeCanvas();
+window.addEventListener('resize', () => { if(!revealed) sizeCanvas(); });
+
+function getPos(e){
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function scratchAt(x, y){
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath();
+  ctx.arc(x, y, 26, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function checkProgress(){
+  checkCounter++;
+  if(checkCounter % 6 !== 0) return;
+  const w = canvas.width, h = canvas.height;
+  const imgData = ctx.getImageData(0, 0, w, h).data;
+  let cleared = 0;
+  const step = 4;
+  let sampled = 0;
+  for(let i = 3; i < imgData.length; i += 4 * step){
+    sampled++;
+    if(imgData[i] < 40) cleared++;
+  }
+  const pct = Math.round((cleared / sampled) * 100);
+  progressFill.style.width = Math.min(pct, 100) + '%';
+  hintText.textContent = pct >= 100 ? 'fully revealed' : pct + '% scratched';
+  if(pct > 55 && !revealed){
+    revealed = true;
+    finishReveal();
+  }
+}
+
+function finishReveal(){
+  canvas.animate([
+    { opacity: 1 },
+    { opacity: 0 }
+  ], { duration: 500, easing: 'ease-out' }).onfinish = () => {
+    canvas.style.display = 'none';
+  };
+  progressFill.style.width = '100%';
+  hintText.textContent = '100% scratched';
+  replayBtn.classList.add('show');
+  burstConfetti();
+}
+
+function startScratch(e){
+  if(revealed) return;
+  scratching = true;
+  const pos = getPos(e);
+  scratchAt(pos.x, pos.y);
+}
+function moveScratch(e){
+  if(!scratching || revealed) return;
+  e.preventDefault();
+  const pos = getPos(e);
+  scratchAt(pos.x, pos.y);
+  checkProgress();
+}
+function endScratch(){ scratching = false; }
+
+canvas.addEventListener('mousedown', startScratch);
+canvas.addEventListener('mousemove', moveScratch);
+window.addEventListener('mouseup', endScratch);
+
+canvas.addEventListener('touchstart', startScratch, { passive: true });
+canvas.addEventListener('touchmove', moveScratch, { passive: false });
+canvas.addEventListener('touchend', endScratch);
+
+function burstConfetti(){
+  const colors = ['#FF5C8A','#C9A6FF','#F0C464','#3FCBA0'];
+  for(let i = 0; i < 60; i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+    document.body.appendChild(c);
+    const duration = 2500 + Math.random() * 1500;
+    const drift = (Math.random() - 0.5) * 200;
+    c.animate([
+      { transform: c.style.transform + ' translate(0,0)', opacity: 1 },
+      { transform: c.style.transform + ' translate(' + drift + 'px, 100vh)', opacity: 0.8 }
+    ], { duration: duration, easing: 'ease-in' });
+    setTimeout(() => c.remove(), duration);
+  }
+}
+</script>
+</body>
+</html>
